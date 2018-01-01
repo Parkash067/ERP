@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="custom_customer_form_view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="last_name" placeholder="Last Name"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="placeholder">First Name</attribute>
+                </xpath>
+                <xpath expr="//field[@name='category_id']" position="attributes">
+                    <attribute name="placeholder">Category</attribute>
+                </xpath>
+                <xpath expr="//field[@name='function']" position="attributes">
+                    <attribute name="string">Designation</attribute>
+                </xpath>
+                <xpath expr="//field[@name='phone']" position="after">
+                    <field name="phone_one"/>
+                </xpath>
+                <xpath expr="//field[@name='phone']" position="attributes">
+                    <attribute name="string">Phone#1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='mobile']" position="after">
+                    <field name="mobile_one"/>
+                </xpath>
+                 <xpath expr="//field[@name='mobile']" position="attributes">
+                    <attribute name="string">Mobile#1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='mobile_one']" position="after">
+                    <field name="office"/>
+                    <field name="office_one"/>
+                </xpath>
+                <xpath expr="//field[@name='fax']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='title']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='country_id']" position="after">
+                    <field name="hash_key" placeholder="Hash Key"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
