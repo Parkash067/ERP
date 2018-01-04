@@ -82,7 +82,8 @@ class cdr(osv.osv):
                 for ind, rec in enumerate(rec_lst):
                     key_nm = 'item ' + str(ind)
                     dct[key_nm] = rec[1:-1]
-                    sorted(dct,dct.keys())
+                    # change sorted as it doesnt work in our scenario
+                    # sorted(dct,dct.keys())
                 end_lst.append(dct)
         return end_lst
 
