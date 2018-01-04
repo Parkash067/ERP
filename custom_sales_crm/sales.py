@@ -54,3 +54,17 @@ class crm_lead(osv.osv):
         for stage_id, lead_ids in stages_leads.items():
             self.write(cr, uid, lead_ids, {'stage_id': stage_id}, context=context)
         return True
+
+
+class cdr(osv.osv):
+    _name = 'cdr_logs'
+    _columns = {
+        'customer_id': fields.integer('Customer ID', store=True),
+        'customer_name': fields.char('Customer Name', store=True),
+        'hash_key': fields.char('Customer Name', store=True),
+        'country': fields.char('Country', store=True),
+        'number': fields.char('Number', store=True),
+        'duration': fields.datetime('Duration', store=True),
+        'type': fields.selection([('Toll Free', 'Toll Free'),('Normal', 'Normal')], store=True)
+
+    }
