@@ -18,6 +18,30 @@ class custom_contract(osv.osv):
         'include_cdr_amount': fields.boolean('Calculate amount from CDR files', store=True),
     }
 
+    def get_customer_details(self, cr, uid, ids, hash_key,context=None):
+        res_partner = self.pool.get('res.partner')
+
+
+    # Get Wizard Record
+
+    def read_logs(self,file_path):
+        #make sure using r'filepath' to mean its a string literal
+        fl = open(file_path,'r')
+        end_lst = []
+        fl_all = fl.read()
+        lst_rec = fl_all.split('\n')
+        for rec in lst_rec:
+            rec_lst = rec.split(',')
+            print rec_lst
+            if len(rec_lst) > 1:
+                dct = {}
+                for ind, rec in enumerate(rec_lst):
+                    key_nm = 'item ' + str(ind)
+                    dct[key_nm] = rec[1:-1]
+                    # change sorted as it doesnt work in our scenario
+                    # sorted(dct,dct.keys())
+                end_lst.append(dct)
+        return end_lst
 
     # This is the function which is reponsible to create invoice lines from cron job we must modified these lines
     def _prepare_invoice_line(self, cr, uid, line, fiscal_position, context=None):
@@ -61,6 +85,7 @@ class custom_contract(osv.osv):
         return invoice
 
     def _recurring_create_invoice(self, cr, uid, ids, automatic=False, context=None):
+        crd_rec = self.read_logs('./tollfree.txt')
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>Invoices creation>>>>>>>>>>>>>>>>>>>>"
         context = context or {}
         invoice_ids = []

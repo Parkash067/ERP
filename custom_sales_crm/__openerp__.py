@@ -42,7 +42,7 @@ The Dashboard for the Sales Manager will include
     """,
     'website': 'http://pk067.herokuapp.com/',
     'depends': ['base_setup','sale','crm'],
-    'data': ['views/sales_view.xml','views/menuitems_view.xml'],
+    'data': ['views/invoice_view.xml','views/menuitems_view.xml'],
     'installable': True,
     'auto_install': False,
 
