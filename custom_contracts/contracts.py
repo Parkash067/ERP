@@ -23,7 +23,6 @@ class custom_contract(osv.osv):
 
 
     # Get Wizard Record
-
     def read_logs(self,file_path):
         #make sure using r'filepath' to mean its a string literal
         fl = open(file_path,'r')

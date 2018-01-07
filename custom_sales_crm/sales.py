@@ -70,3 +70,37 @@ class cdr(osv.osv):
     }
 
 
+class call_packages(osv.osv):
+    _name = 'call.rates'
+    _rec_name = 'partner_id'
+    _columns = {
+        'partner_id': fields.many2one('res.partner', store=True, string='Customer', required=True),
+        'hash_key': fields.related('partner_id', 'hash_key', type='char', store=True, string='Hash Key', readonly=True),
+        'tf_package_one': fields.float('0.02C', store=True),
+        'tf_package_two': fields.float('0.04C', store=True),
+        'tf_package_three': fields.float('0.12C', store=True),
+        'tf_package_four': fields.float('0.16C', store=True),
+        'tf_package_five': fields.float('0.25C', store=True),
+        'local_rates': fields.float('Local Call Rate Normal Billing', store=True),
+        'national_rates': fields.float('National Call Rate Normal Billing', store=True),
+        'mobile_rates': fields.float('Mobile Call Rate Normal Billing', store=True),
+        'special_number': fields.float('Special Number Call Rate Normal Billing', store=True),
+        'international_rates_id': fields.one2many('international.rates','call_rates_id','International Rates', store=True)
+    }
+
+    _sql_constraints = [
+        ('partner_id', 'unique(partner_id)', 'Rates have been already defined of this customer!')
+    ]
+
+
+class international_rates(osv.osv):
+    _name = 'international.rates'
+    _rec_name = 'country_id'
+
+    _columns = {
+        'call_rates_id': fields.many2one('call.rates', store=True),
+        'country_id': fields.many2one('res.country','Country', store=True, required=True),
+        'name': fields.related('country_id', 'name', type='char', store=True, string='Name', readonly=True),
+        'rates': fields.float('Rates', store=True)
+    }
+

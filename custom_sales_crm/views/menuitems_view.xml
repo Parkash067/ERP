@@ -4,5 +4,22 @@
         <record model="ir.ui.menu" id="sale.menu_sale_quotations">
             <field name="name">Quotation For Package</field>
         </record>
+
+        <record id="customer_call_package_view" model="ir.actions.act_window">
+	        <field name="name">Call Packages</field>
+            <field name="res_model">call.rates</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+        <menuitem
+            name="Phone Billing"
+            action="customer_call_package_view"
+            id="menu_customer_call_package_view"
+            sequence="100"
+            parent="base.menu_sales">
+        </menuitem>
     </data>
 </openerp>

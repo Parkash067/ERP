@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+         <!-- ================================================== Beginning of Form view of Call Rates ================================================ -->
+        <record id="call_rates_form_view" model="ir.ui.view">
+            <field name="name">call_rates.form.view</field>
+            <field name="view_type">form</field>
+            <field name="model">call.rates</field>
+            <field name="arch" type="xml">
+                <form string="Phone Rates">
+                    <sheet class="oe_form_sheet_full_screen">
+                        <h1 style="color:#7C7BAD">Add Phone Rate</h1>
+                        <field name="partner_id" placeholder="Customer"/>
+                        <group>
+                            <group col="4">
+                                <field name="local_rates"/>
+                                <field name="tf_package_one" string="0.02C Call Rate Toll Free (Within the same LCA Local to Local)"/>
+                                <field name="national_rates"/>
+                                <field name="tf_package_two" string="0.04C Call Rate Toll Free (NZ Landline National to NZ Landline(Non-Local))"/>
+                                <field name="mobile_rates"/>
+                                <field name="tf_package_three" string="0.12C (Mobile) Call Rate Toll Free (NZ Mobile Call to NZ Landline)"/>
+                                <field name="special_number"/>
+                                <field name="tf_package_four" string="0.16C Call Rate Toll Free (Landline Originating to NZ Mobile)"/>
+                                <field name="hash_key"/>
+                                <field name="tf_package_five" string="0.24C Call Rate Toll Free (Mobile Originating to NZ Mobile)"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="International Rates">
+                                <field name="international_rates_id" colspan="4" nolabel="1">
+                                    <tree editable="top" string="International Rates">
+                                        <field name="country_id"/>
+                                        <field name="rates"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- ================================================== Ending of Form view of call rates ================================================ -->
+
+        <!-- ================================================== Beginning of tree view of call rates ================================================-->
+        <record id="call_rates_tree_view" model="ir.ui.view">
+            <field name="name">call_rates.tree.view</field>
+            <field name="model">call.rates</field>
+            <field name="arch" type="xml">
+                <tree string="Call Rates Tree" version="8.0">
+                    <field name="partner_id"/>
+                    <field name="hash_key"/>
+                </tree>
+            </field>
+        </record>
+         <!-- ================================================== Ending of tree view of call rates ================================================ -->
+    </data>
+</openerp>
