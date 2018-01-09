@@ -37,6 +37,7 @@ class custom_contract(osv.osv):
                 for ind, rec in enumerate(rec_lst):
                     key_nm = 'item ' + str(ind)
                     dct[key_nm] = rec[1:-1]
+
                     # change sorted as it doesnt work in our scenario
                     # sorted(dct,dct.keys())
                 end_lst.append(dct)
@@ -54,6 +55,7 @@ class custom_contract(osv.osv):
         taxes = res.taxes_id or False
         tax_id = fpos_obj.map_tax(cr, uid, fiscal_position, taxes, context=context)
         values = {
+
             'name': line.name,
             'account_id': account_id,
             'account_analytic_id': line.analytic_account_id.id,

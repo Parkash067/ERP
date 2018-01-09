@@ -61,10 +61,20 @@ class cdr(osv.osv):
     _columns = {
         'customer_id': fields.integer('Customer ID', store=True),
         'customer_name': fields.char('Customer Name', store=True),
-        'hash_key': fields.char('Customer Name', store=True),
+        'hash_key': fields.char('Hash Key', store=True),
         'country': fields.char('Country', store=True),
-        'number': fields.char('Number', store=True),
-        'duration': fields.datetime('Duration', store=True),
+        'Incoming_call_receiver': fields.char('Number dialed', store=True),
+        # 'Number_used': fields.char('Number', store=True),
+        'dialer': fields.char('Dialer', store=True),
+        'time_stamp': fields.datetime('Time_Stamp', store=True),
+        'total_call_time_from_dialing': fields.float('Total Time', store=True),
+        'calling_talk_time': fields.float('Total call time', store=True),
+        'Mobile_phone_county': fields.char('Mobile Phone/Country', store=True),
+        'charging_rate': fields.float('Charging Rate', store=True),
+        'actual_amount_charged': fields.char('Amount Charged', store=True),
+        'hash_code':fields.char('Hash Code', store=True),
+        # 'duration': fields.datetime('Duration', store=True),
+
         'type': fields.selection([('Toll Free', 'Toll Free'),('Normal', 'Normal')], store=True)
 
     }
