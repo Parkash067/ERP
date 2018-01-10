@@ -2,7 +2,7 @@ from dateutil.relativedelta import relativedelta
 import datetime
 import logging
 import time
-
+import os
 from openerp.osv import osv, fields
 import openerp.tools
 from openerp.tools.translate import _
@@ -18,29 +18,33 @@ class custom_contract(osv.osv):
         'include_cdr_amount': fields.boolean('Calculate amount from CDR files', store=True),
     }
 
-    def get_customer_details(self, cr, uid, ids, hash_key,context=None):
-        res_partner = self.pool.get('res.partner')
+    def cron_save_cdr_logs(self, cr, uid, context=None):
 
+        logs = self.read_cdr_files(cr,uid)
+        for log in logs:
+            partner = self.pool.get('res.partner').browse(cr, uid, log['item16'])#replace this with sql query
+            print partner.name#initialize partner model
+        return True
 
     # Get Wizard Record
-    def read_logs(self,file_path):
-        #make sure using r'filepath' to mean its a string literal
-        fl = open(file_path,'r')
+    def read_cdr_files(self, cr, uid, context=None):
         end_lst = []
-        fl_all = fl.read()
-        lst_rec = fl_all.split('\n')
-        for rec in lst_rec:
-            rec_lst = rec.split(',')
-            print rec_lst
-            if len(rec_lst) > 1:
-                dct = {}
-                for ind, rec in enumerate(rec_lst):
-                    key_nm = 'item ' + str(ind)
-                    dct[key_nm] = rec[1:-1]
-
-                    # change sorted as it doesnt work in our scenario
-                    # sorted(dct,dct.keys())
-                end_lst.append(dct)
+        path = os.path.expanduser('E:/My Projects/odoo-8.0/ERP/custom_contracts/tollfree.txt')
+        try:
+            #make sure using r'filepath' to mean its a string literal
+            fl = open(path,'r')
+            fl_all = fl.read()
+            lst_rec = fl_all.split('\n')
+            for rec in lst_rec:
+                rec_lst = rec.split(',')
+                if len(rec_lst) > 1:
+                    dct = {}
+                    for ind, rec in enumerate(rec_lst):
+                        key_nm = 'item' + str(ind)
+                        dct[key_nm] = rec[1:-1]
+                    end_lst.append(dct)
+        except:
+            print("File is not present in current directory")
         return end_lst
 
     # This is the function which is reponsible to create invoice lines from cron job we must modified these lines
@@ -55,7 +59,6 @@ class custom_contract(osv.osv):
         taxes = res.taxes_id or False
         tax_id = fpos_obj.map_tax(cr, uid, fiscal_position, taxes, context=context)
         values = {
-
             'name': line.name,
             'account_id': account_id,
             'account_analytic_id': line.analytic_account_id.id,
@@ -76,8 +79,6 @@ class custom_contract(osv.osv):
         for line in contract.recurring_invoice_line_ids:
             values = self._prepare_invoice_line(cr, uid, line, fiscal_position, context=context)
             invoice_lines.append((0, 0, values))
-        print ">>>>>>>>>>>>>>>>>>>>>>>>.invoice lines>>>>>>>>>>>>>"
-        print invoice_lines
         return invoice_lines
 
     def _prepare_invoice(self, cr, uid, contract, context=None):
@@ -86,8 +87,6 @@ class custom_contract(osv.osv):
         return invoice
 
     def _recurring_create_invoice(self, cr, uid, ids, automatic=False, context=None):
-        crd_rec = self.read_logs('./tollfree.txt')
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>Invoices creation>>>>>>>>>>>>>>>>>>>>"
         context = context or {}
         invoice_ids = []
         current_date = time.strftime('%Y-%m-%d')

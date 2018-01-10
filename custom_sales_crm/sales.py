@@ -72,9 +72,7 @@ class cdr(osv.osv):
         'Mobile_phone_county': fields.char('Mobile Phone/Country', store=True),
         'charging_rate': fields.float('Charging Rate', store=True),
         'actual_amount_charged': fields.char('Amount Charged', store=True),
-        'hash_code':fields.char('Hash Code', store=True),
         # 'duration': fields.datetime('Duration', store=True),
-
         'type': fields.selection([('Toll Free', 'Toll Free'),('Normal', 'Normal')], store=True)
 
     }

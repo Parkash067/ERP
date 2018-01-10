@@ -24,6 +24,7 @@
     # always loaded
     'data': [
         'views/contracts_view.xml',
+        'data/scheduled_action_data.xml'
     ],
     'installable': True,
     'auto_install': False,
