@@ -29,7 +29,7 @@ def save_logs(logs_dict):
     for logs in logs_dict:
         rec_id = self.env['res.partner'].search([('hash_kay','=',logs[14])])
         usr_name= self.env['res.partner'].browse([rec_id.id]).name
-        tm_stamp=logs[7] + ' ' logs[8]
+        tm_stamp=logs[7] + ' ' +logs[8]
         dt_tm_stamp=dt.datetime.strptime(tm_stamp,"%Y-%m-%d %H:%M:%S")
         vals={
             'customer_id': rec_id.id,
