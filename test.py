@@ -45,11 +45,18 @@ def save_logs(logs_dict):
             'charging_rate': logs[12],
             'actual_amount_charged': logs[13],
             'hash_code': logs[14],
-            'type': logs['type']
+            'type': logs['type']}
 
-            }
-        new_ids_created=self.env['cdr_logs'].create(vals)
-        self.env.cr.commit()
+        # i think it is dot make sure
+        rec_logs_id = self.env['cdr_logs'].search([('hash_kay','=',vals['hash_code'])])
+        rec_redundant=self.env['cdr_logs'].browse(rec_logs_id.id)
+
+        if not rec_redundant:
+            new_ids_created = self.env['cdr_logs'].create(vals)
+            self.env.cr.commit()
+        else:
+            print "data already exist"
+
 
 
 print logs[0]
