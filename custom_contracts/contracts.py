@@ -1,3 +1,5 @@
+from _ssl import txt2obj
+
 from dateutil.relativedelta import relativedelta
 import datetime
 import logging
@@ -27,25 +29,53 @@ class custom_contract(osv.osv):
         return True
 
     # Get Wizard Record
-    def read_cdr_files(self, cr, uid, context=None):
+    def read_cdr_files(self, cr, uid, context=None,):
         end_lst = []
+        # return_list = []
+        # change the below cod3e or comment it
         path = os.path.expanduser('E:/My Projects/odoo-8.0/ERP/custom_contracts/tollfree.txt')
+        # get pATH OF THR FOLDER WHERE FILES ARE STORED
+        list_of_files = os.listdir(path)
+        txt_files = filter(lambda file: file[-4:] == '.txt', list_of_files)
+
+        # list_of_usable_file = []
         try:
-            #make sure using r'filepath' to mean its a string literal
-            fl = open(path,'r')
-            fl_all = fl.read()
-            lst_rec = fl_all.split('\n')
-            for rec in lst_rec:
-                rec_lst = rec.split(',')
-                if len(rec_lst) > 1:
-                    dct = {}
-                    for ind, rec in enumerate(rec_lst):
-                        key_nm = 'item' + str(ind)
-                        dct[key_nm] = rec[1:-1]
-                    end_lst.append(dct)
+            file_to_dic = {}
+            index = 0
+            for single_text_file_path in txt_files:
+                single_text_file_path = r'C:\Users\kickahs\Desktop\erp' + '\\' + single_text_file_path
+                # make sure using r'filepath' to mean its a string literal
+                fl = open(single_text_file_path, 'r')
+                fl_all = fl.read()
+                lst_rec = fl_all.split('\n')
+                for rec in lst_rec:
+                    rec_lst = rec.split(',')
+                    if len(rec_lst) > 10:
+                        dct = {}
+                        for ind, rec in enumerate(rec_lst):
+                            key_nm = 'item' + str(ind)
+                            dct[key_nm] = rec[1:-1]
+                        end_lst.append(dct)
+                        # list_of_usable_file.append(single_text_file_path)
+                        # update path to original
+                        single_text_file_path = r'C:\Users\kickahs\Desktop\erp'
+                    else:
+                        # update path to original
+                        # single_text_file_path = r'C:\Users\kickahs\Desktop\erp'
+                        break
+
+                # if len(end_lst)>0:
+                #     return_list.append(end_lst)
+                if len(end_lst) > 0:
+                    file_to_dic[index] = end_lst
+                    end_lst = []
+                    index = index + 1
+            # return return_list
+            return file_to_dic
         except:
             print("File is not present in current directory")
-        return end_lst
+
+
 
     # This is the function which is reponsible to create invoice lines from cron job we must modified these lines
     def _prepare_invoice_line(self, cr, uid, line, fiscal_position, context=None):
