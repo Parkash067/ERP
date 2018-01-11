@@ -6,6 +6,7 @@ import os
 from openerp.osv import osv, fields
 import openerp.tools
 from openerp.tools.translate import _
+from config import file_location
 
 from openerp.addons.decimal_precision import decimal_precision as dp
 
@@ -19,17 +20,34 @@ class custom_contract(osv.osv):
     }
 
     def cron_save_cdr_logs(self, cr, uid, context=None):
-
+        cdr_log = self.pool.get('cdr.logs')
         logs = self.read_cdr_files(cr,uid)
         for log in logs:
-            partner = self.pool.get('res.partner').browse(cr, uid, log['item16'])#replace this with sql query
-            print partner.name#initialize partner model
+            hash_key = log[16].replace('"','')
+            cr.execute("select id,name from res_partner where hash_key='"+hash_key.strip()+"'")
+            partner = cr.dictfetchall()
+            if len(partner)>0:
+                res = {
+                    'customer_id': partner[0]['id'],
+                    'customer_name': partner[0]['name'] ,
+                    'hash_key': hash_key.strip() ,
+                    'region': log[11].replace('"','').strip(),
+                    'incoming_call_receiver':log[2].replace('"','').strip() ,
+                    'dialer': log[3].replace('"','').strip() ,
+                    'time_stamp': log[7].replace('"','').strip() + " " + log[8].replace('"','').strip(),
+                    'total_call_time_from_dialing': log[9].replace('"','').strip(),
+                    'calling_talk_time': log[10].replace('"','').strip(),
+                    'charging_rate': log[13].replace('"','').strip(),
+                    'type': 'Toll Free'
+                }
+                cdr_log.create(cr, uid, res, context=context)
+        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Job Done >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
         return True
 
     # Get Wizard Record
     def read_cdr_files(self, cr, uid, context=None):
         end_lst = []
-        path = os.path.expanduser('E:/My Projects/odoo-8.0/ERP/custom_contracts/tollfree.txt')
+        path = os.path.expanduser(file_location)
         try:
             #make sure using r'filepath' to mean its a string literal
             fl = open(path,'r')
@@ -38,11 +56,7 @@ class custom_contract(osv.osv):
             for rec in lst_rec:
                 rec_lst = rec.split(',')
                 if len(rec_lst) > 1:
-                    dct = {}
-                    for ind, rec in enumerate(rec_lst):
-                        key_nm = 'item' + str(ind)
-                        dct[key_nm] = rec[1:-1]
-                    end_lst.append(dct)
+                    end_lst.append(rec_lst)
         except:
             print("File is not present in current directory")
         return end_lst

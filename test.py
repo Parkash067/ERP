@@ -1,31 +1,32 @@
 import sys
 import datetime as dt
-def read_logs(file_path):
-    # make sure using r'filepath' to mean its a string literal
-    if 'toll_free' in file_path:
-        ctype = 'Toll Free'
-    else:
-        ctype='Normal'
-    fl = open(file_path, 'r')
+writer = sys.stdout.write
+import os
+
+def read_cdr_files(path):
     end_lst = []
-    fl_all = fl.read()
-    lst_rec = fl_all.split('\n')
-    for rec in lst_rec:
-        end_lst.append(rec)
-        rec_lst = rec.split(',')
-        if len(rec_lst) > 1:
-            dct = {}
-            for ind, rec in enumerate(rec_lst):
-                key_nm = ind
-                dct[key_nm] = rec[1:-1]
-                dct['type'] = ctype
-                # change added by adding another item to dictionary
-                # change sorted as it doesnt work in our scenario
-            sorted(dct.iterkeys())
-            end_lst.append(dct)
-    print end_lst[0]
+    path_ = os.path.expanduser(path)
+    try:
+        # make sure using r'filepath' to mean its a string literal
+        fl = open(path_, 'r')
+        fl_all = fl.read()
+        lst_rec = fl_all.split('\n')
+        for rec in lst_rec:
+            rec_lst = rec.split(',')
+            if len(rec_lst) > 1:
+                print rec_lst
+                dct = {}
+                for ind, rec in enumerate(rec_lst):
+                    key_nm = 'item' + str(ind)
+                    dct[key_nm] = rec[1:-1]
+                end_lst.append(dct)
+    except:
+        print("File is not present in current directory")
     return end_lst
-read_logs('./custom_contracts/tollfree.txt')
+lst = read_cdr_files('./custom_contracts/tollfree.txt')
+
+
+
 # this function saves logs in cdr logs table
 # def save_logs(logs_dict):
 #     for logs in logs_dict:

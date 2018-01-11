@@ -57,24 +57,19 @@ class crm_lead(osv.osv):
 
 
 class cdr(osv.osv):
-    _name = 'cdr_logs'
+    _name = 'cdr.logs'
     _columns = {
         'customer_id': fields.integer('Customer ID', store=True),
         'customer_name': fields.char('Customer Name', store=True),
         'hash_key': fields.char('Hash Key', store=True),
-        'country': fields.char('Country', store=True),
-        'Incoming_call_receiver': fields.char('Number dialed', store=True),
-        # 'Number_used': fields.char('Number', store=True),
+        'region': fields.char('Region', store=True),
+        'incoming_call_receiver': fields.char('Number dialed', store=True),
         'dialer': fields.char('Dialer', store=True),
         'time_stamp': fields.datetime('Time_Stamp', store=True),
-        'total_call_time_from_dialing': fields.float('Total Time', store=True),
-        'calling_talk_time': fields.float('Total call time', store=True),
-        'Mobile_phone_county': fields.char('Mobile Phone/Country', store=True),
+        'total_call_time_from_dialing': fields.integer('Call Duration', store=True),
+        'calling_talk_time': fields.integer('Talk Time', store=True),
         'charging_rate': fields.float('Charging Rate', store=True),
-        'actual_amount_charged': fields.char('Amount Charged', store=True),
-        # 'duration': fields.datetime('Duration', store=True),
         'type': fields.selection([('Toll Free', 'Toll Free'),('Normal', 'Normal')], store=True)
-
     }
 
 

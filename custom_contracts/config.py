@@ -1,0 +1,1 @@
+file_location = 'E:/My Projects/odoo-8.0/ERP/custom_contracts/tollfree.txt'
