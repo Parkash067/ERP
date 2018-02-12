@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="custom_hr_form_view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='address_home_id']" position="before">
+                    <field name="ird_number" />
+                </xpath>
+            </field>
+        </record>
+
+         <!-- ================================================== Begin menuitem of Opportunities Menu ================================================ -->
+        <record id="opp_commission" model="ir.actions.act_window">
+	        <field name="name">Opportunity Commission Form</field>
+            <field name="res_model">lead.to.opportunity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+
+        <menuitem name="Opportunity Commissions"
+                  action="opp_commission"
+                  id="menu_opp_commission"
+                  sequence="100"
+                  parent="hr.menu_hr_main"/>
+        <!-- ================================================== Begin menuitem of Opportunities Menu ================================================ -->
+        <!-- ================================================== Begin tree view of opportunity ================================================ -->
+        <record id="opp_commission_tree" model="ir.ui.view">
+            <field name="name">Opportunity Tree</field>
+            <field name="model">lead.to.opportunity</field>
+            <field name="arch" type="xml">
+                <tree string="Commisions" version="8.0">
+                    <field name="sales_person"/>
+                    <field name="date_of_sale"/>
+                    <field name="commission_amount"/>
+                </tree>
+            </field>
+        </record>
+        <!--========================================================= End tree view of opportunity ================================================-->
+
+           <!-- ================================================== Begin menuitem of Opportunities Menu ================================================ -->
+        <record id="sale_commission" model="ir.actions.act_window">
+	        <field name="name">Sale Commission Form</field>
+            <field name="res_model">sale.won</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">click create to add a new record</p>
+            </field>
+        </record>
+
+        <menuitem name="Sales Commissions"
+                  action="sale_commission"
+                  id="menu_sale_commission"
+                  sequence="120"
+                  parent="hr.menu_hr_main"/>
+        <!-- ================================================== Begin menuitem of Opportunities Menu ================================================ -->
+        <!-- ================================================== Begin tree view of FP customers ================================================ -->
+        <record id="sale_commission_tree" model="ir.ui.view">
+            <field name="name">Sale Opportunity Tree</field>
+            <field name="model">sale.won</field>
+            <field name="arch" type="xml">
+                <tree string="Commisions" version="8.0">
+                    <field name="sales_person"/>
+                    <field name="date_of_sale"/>
+                    <field name="commission_amount"/>
+                </tree>
+            </field>
+        </record>
+        <!--========================================================= End tree view of FP customers ================================================-->
+
+
+    </data>
+</openerp>
