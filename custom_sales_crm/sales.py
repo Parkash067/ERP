@@ -29,7 +29,8 @@ class sales_order(osv.osv):
 class crm_lead(osv.osv):
     _inherit = 'crm.lead'
     _columns = {
-
+        'lead_to_opportunity_date': fields.date('Lead to Opportunity', store=True, readonly=True),
+        'sale_confirm_date': fields.date('Sale Confirmed', store=True, readonly=True)
     }
 
     def case_mark_won(self, cr, uid, ids, context=None):
@@ -52,8 +53,31 @@ class crm_lead(osv.osv):
             else:
                 raise osv.except_osv(_('Warning!'),_("Before mark won please enter 'Hash Key' of customer"))
         for stage_id, lead_ids in stages_leads.items():
-            self.write(cr, uid, lead_ids, {'stage_id': stage_id}, context=context)
+            self.write(cr, uid, lead_ids, {'stage_id': stage_id,'sale_confirm_date':fields.datetime.now() }, context=context)
         return True
+
+    def _convert_opportunity_data(self, cr, uid, lead, customer, section_id=False, context=None):
+        crm_stage = self.pool.get('crm.case.stage')
+        contact_id = False
+        if customer:
+            contact_id = self.pool.get('res.partner').address_get(cr, uid, [customer.id])['default']
+        if not section_id:
+            section_id = lead.section_id and lead.section_id.id or False
+        val = {
+            'planned_revenue': lead.planned_revenue,
+            'probability': lead.probability,
+            'name': lead.name,
+            'partner_id': customer and customer.id or False,
+            'type': 'opportunity',
+            'date_action': fields.datetime.now(),
+            'date_open': fields.datetime.now(),
+            'lead_to_opportunity_date': fields.datetime.now(),
+            'email_from': customer and customer.email or lead.email_from,
+            'phone': customer and customer.phone or lead.phone,
+        }
+        if not lead.stage_id or lead.stage_id.type=='lead':
+            val['stage_id'] = self.stage_find(cr, uid, [lead], section_id, [('type', 'in', ('opportunity', 'both'))], context=context)
+        return val
 
 
 class cdr(osv.osv):
