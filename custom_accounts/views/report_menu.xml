@@ -4,7 +4,7 @@
         <report
                 id="custom_invoice_pdf"
                 model="account.invoice"
-                string="Monitoring Invoice"
+                string="Generate Invoice"
                 report_type="qweb-pdf"
                 name="custom_accounts.custom_invoice"
                 attachment_use="False"
