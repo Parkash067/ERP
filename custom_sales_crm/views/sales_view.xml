@@ -33,6 +33,7 @@
                 <xpath expr="//field[@name='mobile_one']" position="after">
                     <field name="office"/>
                     <field name="office_one"/>
+                    <field name="account_no"/>
                 </xpath>
                 <xpath expr="//field[@name='fax']" position="attributes">
                     <attribute name="invisible">1</attribute>

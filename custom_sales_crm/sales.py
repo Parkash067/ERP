@@ -16,6 +16,7 @@ class sales(osv.osv):
         'office_one': fields.char('Office#2', store=True),
         'mobile_one': fields.char('Mobile#2', store=True),
         'phone_one': fields.char('Phone#2', store=True),
+        'account_no': fields.char('Account No.', store=True)
     }
 
 
