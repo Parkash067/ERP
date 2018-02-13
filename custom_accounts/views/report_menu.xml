@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+                id="custom_invoice_pdf"
+                model="account.invoice"
+                string="Monitoring Invoice"
+                report_type="qweb-pdf"
+                name="custom_accounts.custom_invoice"
+                attachment_use="False"
+                file="custom_accounts.custom_invoice"
+        />
+    </data>
+</openerp>

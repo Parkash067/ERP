@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- ================================================== Beginning of tree view of Toll Free ================================================-->
+        <record id="tollfree_tree_view" model="ir.ui.view">
+            <field name="name">tollfree.tree.view</field>
+            <field name="model">cdr.logs</field>
+            <field name="arch" type="xml">
+                <tree string="Toll Free Tree" version="8.0">
+                    <field name="customer_name"/>
+                    <field name="region"/>
+                    <field name="incoming_call_receiver"/>
+                    <field name="dialer"/>
+                    <field name="time_stamp"/>
+                    <field name="total_call_time_from_dialing"/>
+                    <field name="calling_talk_time"/>
+                    <field name="charging_rate"/>
+                    <field name="type"/>
+                </tree>
+            </field>
+        </record>
+         <!-- ================================================== Ending of tree view of Toll Free ================================================ -->
+     <!-- ================================================== Beginning of Search view of Toll Free ================================================-->
+         <record id="tollfree_search_view" model="ir.ui.view">
+             <field name="name">tollfree.search.view</field>
+             <field name="model">cdr.logs</field>
+             <field name="context">{'search_default_group_type': 'Toll Free'}</field>
+             <field name="arch" type="xml">
+                 <search string="Toll Free Search" version="8.0" >
+                     <field name="customer_name"/>
+                     <filter string="TollFree" domain="[('type','=','tf')]" name="tollfree_filter"/>
+                 </search>
+            </field>
+         </record>
+         <!-- ================================================== Ending of Search view of Toll Free ================================================ -->
+
+    </data>
+</openerp>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+       <template id="custom_invoice">
+           <t t-call='report.html_container'>
+               <t t-foreach="docs" t-as="account_invoice">
+                   <t>
+                      <div class="page">
+                          <div class="row">
+                              <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' %res_company.logo"
+                               style="float:right;height: 100px;"/><br/><br/><br/><br/><br/><br/><br/>
+                              <div style="display:inline-block; width:442px; height:100px; margin-top:-10px">
+                                  <h1>TAX INVOICE</h1>
+                                  <div style="font-size:16px; margin-left:3px;">
+                                      <span t-field="account_invoice.partner_id.name"/>,<span t-field="account_invoice.partner_id.last_name"/><br/>
+                                      <span t-field="account_invoice.partner_id.street"/><br/>
+                                      <span t-field="account_invoice.partner_id.street2"/><br/>
+                                      <span t-field="account_invoice.partner_id.city"/><br/>
+                                      <span t-field="account_invoice.partner_id.country_id.name"/><br/>
+                                      <strong>Account No. <span t-field="account_invoice.partner_id.account_no"/></strong><br/>
+                                      <strong><u>Invoice Due Date<span t-field="account_invoice.date_due"/></u></strong><br/>
+                                  </div>
+                              </div>
+                              <div style="display:inline-block; width:300px; height:100px;float:right;font-size:16px;margin-top:-10px;">
+                                  <strong><span t-esc="'%s' %res_company.name"/></strong><br/>
+                                  <span t-esc="'%s' %res_company.street"/><br/>
+                                  <span t-esc="'%s' %res_company.street2"/>, <span t-esc="'%s' %res_company.city" style="margin-left:5px;"/><br/>
+                                  <span t-esc="'%s' %res_company.country_id.name"/><span t-esc="'%s' %res_company.zip" style="margin-left:5px;"/><br/>
+                                  PH<span t-esc="'%s' %res_company.phone" style="margin-left:5px;"/><br/>
+                                  Fax<span t-esc="'%s' %res_company.fax" style="margin-left:5px;"/><br/>
+                                  <span t-esc="'%s' %res_company.email"/><br/>
+                                  <span t-esc="'%s' %res_company.website"/>
+
+                              </div>
+                              <div style="display:inline-block; width:180px; height:100px;float:right;margin-top:-10px;font-size:16px;">
+                                  <strong>Invoice Date</strong><br/>
+                                  <span t-field="account_invoice.date_invoice"/><br/><br/>
+
+                                  <strong>Invoice Number</strong><br/>
+                                  <span t-field="account_invoice.number"/><br/><br/>
+
+                                  <strong>GST</strong><br/>
+                                  <span>121-412-292</span>
+                              </div>
+                          </div><br/><br/><br/><br/>
+                          <br/><br/><br/><br/>
+                          <div class="row">
+                               <table class="table table-condensed" style="font-size:16px">
+                                  <thead>
+                                      <tr>
+                                          <th>No.</th>
+                                          <th>Description</th>
+                                          <th>Quantity</th>
+                                          <th class="text-right">Unit Price</th>
+                                          <th class="text-right">Tax</th>
+                                          <th class="text-right">Subtotal</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody class="invoice_tbody">
+                                      <tr t-foreach="account_invoice.invoice_line" t-as="l">
+                                          <td>
+                                              <span t-esc="l_index+1"/>
+                                          </td>
+                                          <td>
+                                              <span t-field="l.name"/>
+                                          </td>
+                                          <td>
+                                              <span t-field="l.quantity"/>
+                                          </td>
+                                          <td class="text-right">
+                                              <span t-field="l.price_unit" />
+                                          </td>
+                                          <td class="text-right">
+                                              <span t-esc="round(l.invoice_line_tax_id.amount*100)"/>%
+                                          </td>
+                                          <td class="text-right">
+                                              <span t-field="l.price_subtotal"/>
+                                          </td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                          <div class="row"><br/><br/>
+                              <div class="col-xs-4 pull-right">
+                                  <table class="table table-condensed" style="font-size:16px">
+                                      <tr>
+                                          <td>
+                                              <strong>Total (NZD)</strong>
+                                          </td>
+                                          <td class="text-right">
+                                              <strong><span t-esc="round(account_invoice.amount_untaxed)"/></strong>
+                                          </td>
+                                      </tr>
+                                       <tr>
+                                          <td>
+                                              <strong>Tax (NZD)</strong>
+                                          </td>
+                                          <td class="text-right">
+                                              <strong><span t-esc="round(account_invoice.amount_tax)"/></strong>
+                                          </td>
+                                      </tr>
+                                      <tr >
+                                          <td>
+                                              <strong>Grand Total (NZD)</strong>
+                                          </td>
+                                          <td class="text-right">
+                                              <strong><span t-esc="round(account_invoice.amount_total)"/></strong>
+                                          </td>
+                                      </tr>
+                                      <tr>
+                                          <td>
+                                              <strong>Balance (NZD)</strong>
+                                          </td>
+                                          <td class="text-right">
+                                              <strong><span t-esc="round(account_invoice.residual)"/></strong>
+                                          </td>
+                                      </tr>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+                   </t>
+               </t>
+           </t>
+       </template>
+    </data>
+</openerp>

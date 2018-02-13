@@ -13,7 +13,7 @@
     Enable an email option on an invoice""",
     'website': 'http://pk067.herokuapp.com/',
     'depends': ['base_setup','account_accountant'],
-    'data': ['views/invoice_view.xml'],
+    'data': ['views/invoice_view.xml','views/custom_invoice.xml','views/report_menu.xml'],
     'installable': True,
     'auto_install': False,
 
