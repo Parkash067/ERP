@@ -7,9 +7,10 @@ from datetime import date, timedelta,datetime
 import re
 
 
-class sales(osv.osv):
+class custom_invoice(osv.osv):
     _inherit = "account.invoice"
     _columns = {
+        'invoice_type': fields.selection([('Normal', 'Normal'),('CDR', 'CDR')], store=True, string='Invoice Type')
     }
 
     def action_invoice_send(self, cr, uid, ids, context=None):

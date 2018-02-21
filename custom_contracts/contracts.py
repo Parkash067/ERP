@@ -135,7 +135,7 @@ class custom_contract(osv.osv):
                 'name': line.name,
                 'account_id': account_id,
                 'account_analytic_id': line.analytic_account_id.id,
-                'price_unit': 150005 or 0.0,
+                'price_unit': line.price_unit or 0.0,
                 'quantity': line.quantity,
                 'uos_id': line.uom_id.id or False,
                 'product_id': line.product_id.id or False,
@@ -176,7 +176,11 @@ class custom_contract(osv.osv):
                 context_contract = dict(context, company_id=company_id, force_company=company_id)
                 for contract in self.browse(cr, uid, ids, context=context_contract):
                     try:
-                        invoice_values = self._prepare_invoice(cr, uid, contract,context=context_contract)
+                        if contract.include_cdr_amount:
+                            invoice_values = self._prepare_invoice(cr, uid, contract,context=context_contract)
+                            invoice_values['invoice_type'] = 'CDR'
+                        else:
+                            invoice_values = self._prepare_invoice(cr, uid, contract, context=context_contract)
                         invoice_ids.append(
                             self.pool['account.invoice'].create(cr, uid, invoice_values, context=context))
                         next_date = datetime.datetime.strptime(contract.recurring_next_date or current_date, "%Y-%m-%d")
