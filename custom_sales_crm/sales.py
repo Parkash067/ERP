@@ -82,6 +82,7 @@ class call_packages(osv.osv):
     _name = 'call.rates'
     _rec_name = 'partner_id'
     _columns = {
+        'free_mins': fields.integer('Free Minutes', store=True),
         'partner_id': fields.many2one('res.partner', store=True, string='Customer', required=True),
         'hash_key': fields.related('partner_id', 'hash_key', type='char', store=True, string='Hash Key', readonly=True),
         'tf_package_one': fields.float('0.02C', store=True),

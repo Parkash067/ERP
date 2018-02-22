@@ -25,6 +25,8 @@
                                 <field name="tf_package_five" string="0.24C Call Rate Toll Free (Mobile Originating to NZ Mobile)"/>
                             </group>
                         </group>
+                         <separator string="Free Minutes"/>
+                            <field name="free_mins"/>
                         <notebook>
                             <page string="International Rates">
                                 <field name="international_rates_id" colspan="4" nolabel="1">

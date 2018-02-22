@@ -85,26 +85,35 @@ class custom_contract(osv.osv):
 
     def cal_invoice_amount(self, cr, uid, partner_id, context=None):
         total = 0.0
-        call_history = []
-        types = ['tf']
         cr.execute("Select * from call_rates where partner_id='"+str(partner_id.id)+"'")
         call_rates = cr.dictfetchall()
-        for type in types:
-            cr.execute("SELECT sum(calling_talk_time) as total_talk_time,charging_rate,customer_id FROM public.cdr_logs "
-                    "where charging_rate>0 and type='"+type+"'"+"and customer_id='"+str(partner_id.id)+"'"
-                    "group by charging_rate,customer_id order by charging_rate asc")
-            call_history = cr.dictfetchall()
+        free_mintues = call_rates[0]['free_mins']
+        counter = 0.0
+        cr.execute("SELECT * FROM public.cdr_logs where charging_rate>0 and customer_id='" + str(partner_id.id) + "'"+"order by charging_rate asc")
+        call_history = cr.dictfetchall()
         for log in call_history:
-            if log['charging_rate']== 0.02:
-                total = total+log['total_talk_time']*call_rates[0]['tf_package_one']
-            if log['charging_rate']== 0.04:
-                total = total+log['total_talk_time']*call_rates[0]['tf_package_two']
-            if log['charging_rate']== 0.12:
-                total = total+log['total_talk_time']*call_rates[0]['tf_package_three']
-            if log['charging_rate']== 0.16:
-                total = total+log['total_talk_time']*call_rates[0]['tf_package_four']
-            if log['charging_rate']== 0.25:
-                total = total+log['total_talk_time']*call_rates[0]['tf_package_five']
+            if counter > free_mintues:
+                talk_time = log['calling_talk_time']/60
+                if log['charging_rate']== 0.02 and log['type']=='tf':
+                    total = total+ talk_time*call_rates[0]['tf_package_one']
+                elif log['charging_rate']== 0.04 and log['type']=='tf':
+                    total = total+ talk_time*call_rates[0]['tf_package_two']
+                elif log['charging_rate']== 0.12 and log['type']=='tf':
+                    total = total+ talk_time*call_rates[0]['tf_package_three']
+                elif log['charging_rate']== 0.16 and log['type']=='tf':
+                    total = total+ talk_time*call_rates[0]['tf_package_four']
+                elif log['charging_rate']== 0.25 and log['type']=='tf':
+                    total = total+ talk_time*call_rates[0]['tf_package_five']
+                elif log['call_type']=='National' and log['type']=='normal':
+                    total = total + talk_time * call_rates[0]['national_rates']
+                elif log['call_type']=='Mobile' and log['type']=='normal':
+                    total = total + talk_time * call_rates[0]['mobile_rates']
+                elif log['call_type']=='Local' and log['type']=='normal':
+                    total = total + talk_time * call_rates[0]['local_rates']
+                elif log['call_type']=='Special' and log['type']=='normal':
+                    total = total + talk_time * call_rates[0]['local_rates']
+            else:
+                counter = counter + (log['calling_talk_time']/60)
         return total
 
     # This is the function which is reponsible to create invoice lines from cron job we must modified these lines
